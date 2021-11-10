@@ -1,6 +1,8 @@
-import Head from 'next/head'
+import { GetServerSideProps } from 'next'
 import { FormEvent, useState } from 'react'
-import { AuthContext, useAuth } from '../contexts/AuthContext'
+import { parseCookies } from 'nookies'
+import { useAuth } from '../contexts/AuthContext'
+import { withSSRGuest } from '../utils/withSSRGuest'
 
 export default function Home() {
   const [email,setEmail] = useState('')
@@ -27,3 +29,9 @@ export default function Home() {
      
   )
 }
+
+export const getServerSideProps = withSSRGuest(async (ctx) => {
+  return {
+    props:{}
+  }
+})
