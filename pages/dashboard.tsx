@@ -1,11 +1,14 @@
-import { useEffect } from "react"
+import React, { useEffect } from "react"
+import { Can } from "../components/Can"
 import { useAuth } from "../contexts/AuthContext"
 import { setupApiClient } from "../services/api"
 import { api } from "../services/apiClient"
+import { AuthTokenError } from "../services/errors/authTokenError"
 import { withSSRAuth } from "../utils/withSSRAuth"
 
 export default function Dashboard() {
     const  {user} = useAuth()
+   
     useEffect(() => {
         api.get('/me').then(response=> {console.log(response)})
         .catch(err => console.log(err))
@@ -15,6 +18,9 @@ export default function Dashboard() {
         <>
             <h1>Dashboard</h1>
             <h1>Bem vindo {user?.email}</h1>
+            <Can permissions={['metrics.list']}>
+                <h1>Métricas</h1> 
+            </Can>
         </>
     )
 }
@@ -22,8 +28,8 @@ export default function Dashboard() {
 export const getServersideProps = withSSRAuth(async (ctx) => {
 
     const apiClient = setupApiClient(ctx)
-    const response = await apiClient.get('/me');
     
+        const response = await apiClient.get('/me');
     return{
         props:{}
     }
