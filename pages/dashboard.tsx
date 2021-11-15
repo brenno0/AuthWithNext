@@ -7,7 +7,7 @@ import { AuthTokenError } from "../services/errors/authTokenError"
 import { withSSRAuth } from "../utils/withSSRAuth"
 
 export default function Dashboard() {
-    const  {user} = useAuth()
+    const  {user, signOut} = useAuth()
    
     useEffect(() => {
         api.get('/me').then(response=> {console.log(response)})
@@ -18,6 +18,8 @@ export default function Dashboard() {
         <>
             <h1>Dashboard</h1>
             <h1>Bem vindo {user?.email}</h1>
+            <button onClick={signOut}>Sign Out</button>
+            
             <Can permissions={['metrics.list']}>
                 <h1>Métricas</h1> 
             </Can>
